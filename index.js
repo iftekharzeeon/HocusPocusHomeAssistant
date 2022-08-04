@@ -1,4 +1,5 @@
 const express = require('express');
+const routes = require('./routes/routes');
 
 const port = 3000;
 
@@ -13,11 +14,13 @@ app.use(express.urlencoded({
 
 
 // register view engine
-app.set('view engine', 'ejs');
+//app.set('view engine', 'ejs');
+
+app.use('/', routes);
 
 // middleware & static files
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.sendFile('./views/index.html', {root : __dirname});
 });
