@@ -25,8 +25,8 @@
     border-radius: 10px;
   }
   .asst:hover {
-    background-color: white;
-    color: brown;
+    background-color: rgba(165, 42, 42, 0.76);
+    color: white;
   }
 </style>
 
@@ -39,7 +39,7 @@
         <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
         <img src="./icon.jpg"/>
         <div>
-          <button class="asst"> Click Me!</button>
+          <input class="asst" onclick="btnOnClick()" type="button" id="btn" value="Click Me!"></button>
         </div>
         
         
@@ -49,13 +49,21 @@
 
 <script language="JavaScript" src="http://geoplugin.net/javascript.gp" type="text/javascript"></script>
 <script type="text/javascript">
-  console.log('h');
+  //console.log('h');
   var x = document.getElementById("demo");
   function getLocation() {
     x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName();
     //geoplugin_countryCode();
-    console.log(geoplugin_city());
+    //console.log(geoplugin_city());
   }
   getLocation();
+  
+  function btnOnClick() {
+    if(document.getElementById("btn").value == "Speak!")
+      document.getElementById("btn").value = "Click Me!";
+    else 
+      document.getElementById("btn").value = "Speak!";
+  }
+
 </script>
 </html>
