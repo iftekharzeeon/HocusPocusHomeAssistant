@@ -1,15 +1,47 @@
+<style>
+  body {
+    background-color: rgb(224, 243, 253);
+  }
+  text {
+    color: whitesmoke;
+  }
+  img {
+    margin-left: 620px;
+    margin-bottom: 20px;
+  }
+  .title {
+    margin-top: 80px;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 56px;
+  }
+  .asst {
+    margin-left: 725px;
+    background-color: brown;
+    color: white;
+    height: 50px;
+    width: 80px;
+    border: none;
+    border-radius: 10px;
+  }
+  .asst:hover {
+    background-color: white;
+    color: brown;
+  }
+</style>
+
 <html lang="en">
 
 <body>
 
   <div class="blogs content">
-    <h2>All brrrrrrrr</h2>
-
-        <h3 class="title">Hocus Pocus Home Assistant</h3>
-        <p class="snippet"></p>
-        <p>Under Maintenance</p>
-        <p>Your current location:</p>
-        <p id="demo"></p>
+        <h4 id="demo" style="text-align: right;"></h4>
+        <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
+        <img src="./icon.jpg"/>
+        <div>
+          <button class="asst"> Click Me!</button>
+        </div>
+        
         
   </div>
  
@@ -20,7 +52,8 @@
   console.log('h');
   var x = document.getElementById("demo");
   function getLocation() {
-    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName() + "(" + geoplugin_countryCode() + ")";
+    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName();
+    //geoplugin_countryCode();
     console.log(geoplugin_city());
   }
   getLocation();
