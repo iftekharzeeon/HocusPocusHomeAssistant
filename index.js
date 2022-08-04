@@ -16,7 +16,7 @@ app.use(express.urlencoded({
 // register view engine
 //app.set('view engine', 'ejs');
 
-//app.use('/', routes);
+app.use('/', routes);
 
 // middleware & static files
 app.use(express.static('public'));
