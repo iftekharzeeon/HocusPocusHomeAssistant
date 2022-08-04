@@ -1,0 +1,20 @@
+{
+  "name": "hocus_pocus",
+  "version": "1.0.0",
+  "description": "Hocus Pocus, An intelligent home assistant",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.22.0",
+    "mon": "^0.0.8",
+    "morgan": "^1.10.0",
+    "node": "^18.7.0",
+    "nodemon": "^2.0.19"
+  }
+}
