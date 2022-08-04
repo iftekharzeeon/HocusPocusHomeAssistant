@@ -47,10 +47,15 @@
     <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
     <img src="./icon.jpg" />
     <div>
-      <button class="asst" onclick="findMusic()"> Click Me!</button>
+      <button class="asst" onclick="findMusic()">Find Music Recommendations!</button>
     </div>
+    <br>
     <div>
-      <button class="asst" onclick="getRoutes()"> Get Routes!</button>
+      <button class="asst" onclick="findTVShow()">Find TV Show Recommendations!</button>
+    </div>
+    <br>
+    <div>
+      <button class="asst" onclick="getRoutes()">Get Efficient Route!</button>
     </div>
     <div id='map' style='width: 400px; height: 300px;'></div>
 
@@ -102,6 +107,22 @@ crossorigin=""></script>
       }
     });
   }
+
+  function findTVShow() {
+    let q = 'game of thrones';
+
+    $.ajax({
+      url: 'https://api.tvmaze.com/search/shows?q=' + q,
+      type: 'GET',
+      error: function (err) {
+        console.log(err);
+      },
+      success: function (result) {
+        console.log(result);
+      }
+    });
+  }
+
   function getRoutes() {
     let destination = 'Dhanmondi';
     let limit = 1;
