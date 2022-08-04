@@ -41,6 +41,10 @@ app.get('/mapView', (req, res) => {
     res.sendFile('./views/mapView.html', {root : __dirname});
 });
 
+app.get('/mapNew', (req, res) => {
+    res.sendFile('./views/mapNew.html', {root : __dirname});
+});
+
 app.get('/map', (req, res) => {
     res.sendFile('./views/index_fabiha.html', {root : __dirname});
 });

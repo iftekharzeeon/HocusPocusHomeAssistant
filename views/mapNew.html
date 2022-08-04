@@ -1,0 +1,243 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<style>
+    .topnav {
+        overflow: hidden;
+        background-color: rgb(47, 130, 255);
+    }
+
+    .topnav a {
+        float: left;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav input.split {
+        float: right;
+        background-color: rgb(47, 130, 255);
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        border: none;
+    }
+
+    .topnav input:hover {
+        background-color: rgb(255, 255, 255);
+        color: black;
+    }
+</style>
+
+<body style='border:0; margin: 0'>
+    <div class="topnav">
+        <a href="http://localhost:3000/">Hocus Pocus Home Assistant</a>
+        <input type="button" class="split" id="btn" value="Click Me!"></input>
+    </div>
+    <div id='map'></div>
+</body>
+
+
+<script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=S8d7L47mdyAG5nHG09dUnSPJjreUVPeC"></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=S8d7L47mdyAG5nHG09dUnSPJjreUVPeC"></script>
+<script language="JavaScript" src="http://geoplugin.net/javascript.gp" type="text/javascript"></script>
+
+
+<script>
+    let map = L.map('map', {
+        layers: MQ.mapLayer(),
+        center: [23.729499524655477, 90.38403603051088],
+        zoom: 12
+    });
+
+
+    function runDirection(start, end) {
+
+        // recreating new map layer after removal
+        map = L.map('map', {
+            layers: MQ.mapLayer(),
+            center: [23.729499524655477, 90.38403603051088],
+            zoom: 12
+        });
+
+        var dir = MQ.routing.directions();
+
+        dir.route({
+            locations: [
+                start,
+                end
+            ]
+        });
+
+
+        CustomRouteLayer = MQ.Routing.RouteLayer.extend({
+            createStartMarker: (location) => {
+                var custom_icon;
+                var marker;
+
+                custom_icon = L.icon({
+                    iconUrl: 'img/red.png',
+                    iconSize: [20, 29],
+                    iconAnchor: [10, 29],
+                    popupAnchor: [0, -29]
+                });
+
+                marker = L.marker(location.latLng, { icon: custom_icon }).addTo(map);
+
+                return marker;
+            },
+
+            createEndMarker: (location) => {
+                var custom_icon;
+                var marker;
+
+                custom_icon = L.icon({
+                    iconUrl: 'img/blue.png',
+                    iconSize: [20, 29],
+                    iconAnchor: [10, 29],
+                    popupAnchor: [0, -29]
+                });
+
+                marker = L.marker(location.latLng, { icon: custom_icon }).addTo(map);
+
+                return marker;
+            }
+        });
+
+        map.addLayer(new CustomRouteLayer({
+            directions: dir,
+            fitBounds: true
+        }));
+    }
+
+
+    // function that runs when form submitted
+    function submitForm(start, end) {
+        // event.preventDefault();
+
+        // // delete current map layer
+        map.remove();
+
+        // // getting form data
+        // start = document.getElementById("start").value;
+        // end = document.getElementById("destination").value;
+
+        console.log(start, ' ', end);
+
+        // run directions function
+        runDirection(start, end);
+
+        // // reset form
+        // document.getElementById("form").reset();
+    }
+
+    // // asign the form to form variable
+    // const form = document.getElementById('form');
+
+    // // call the submitForm() function when submitting the form
+    // form.addEventListener('submit', submitForm);
+
+
+    startRecognizeOnceAsyncButton = document.getElementById("btn");
+    subscriptionKey = "daf9781e4092446f823aad48269a90d0";
+    serviceRegion = "eastus";
+
+    startRecognizeOnceAsyncButton.addEventListener("click", function () {
+        startRecognizeOnceAsyncButton.disabled = true;
+        startRecognizeOnceAsyncButton.value = "Speak!";
+
+        var speechConfig = SpeechSDK.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
+
+        speechConfig.speechRecognitionLanguage = "en-US";
+        var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+        recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+
+        recognizer.recognizeOnceAsync(
+            function (result) {
+                startRecognizeOnceAsyncButton.disabled = false;
+                startRecognizeOnceAsyncButton.value = "Click Me!";
+                window.console.log(result);
+
+                let strArr = result.text.split(" ");
+
+                if (strArr[0] == 'Search') {
+                    let searchStr = '';
+                    for (let i = 1; i < strArr.length; i++) {
+                        searchStr += strArr[i] + ' ';
+                    }
+                    $.post('http://localhost:3000/api/getSearch', { q: searchStr, hl: "en", gl: "us", google_domain: "google.com" },
+                        function (returnedData) {
+                            console.log(returnedData);
+                            sessionStorage.setItem("items", JSON.stringify(returnedData));
+                            sessionStorage.setItem("keyword", searchStr);
+                            window.location.replace("/searchItem");
+                        });
+                } else if (strArr[0] == 'Play') {
+                    let searchStr = '';
+                    for (let i = 1; i < strArr.length; i++) {
+                        searchStr += strArr[i] + ' ';
+                    }
+                    let q = searchStr;
+                    let type = 'track';
+                    let limit = 50;
+                    let accessToken = 'BQAOnB6D9pXT-CASm_VqLDBjmq7_JAESEcQDanm_7MRFMN55JMAKKAvahJNuxz2_9_Y35_9bgSMhECk_r83UfZ1BgY0v4ZV8kCmBthHEwWARNQF6mwq8zxtvfNw5gB_mZV48q5QaGHU_lB8NeMJGNsCwHjcsgUnnYwzsHU1uxpKpyccZo1qiYahAoY8o9837lG8';
+
+                    $.ajax({
+                        url: 'https://api.spotify.com/v1/search?q=' + q + '&type=' + type + '&limit=' + limit,
+                        type: 'GET',
+                        headers: {
+                            Authorization: 'Bearer ' + accessToken
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        },
+                        success: function (result) {
+                            console.log(result);
+                            sessionStorage.setItem("items", JSON.stringify(result));
+                            sessionStorage.setItem("keyword", searchStr);
+                            window.location.replace("/musicItem");
+                        }
+                    });
+
+                } else if (strArr[0] == 'Show' && strArr[1] == 'news') {
+
+                    $.post('http://localhost:3000/api/newsSearch', { lang: 'en', country: geoplugin_countryName(), geo: geoplugin_city() },
+                        function (returnedData) {
+                            console.log(returnedData);
+                            sessionStorage.setItem("items", JSON.stringify(returnedData));
+                            sessionStorage.setItem("keyword", "Local News");
+                            window.location.replace("/newsItem");
+                        });
+                } else if (strArr[0] == 'Distance') {
+                    let from = strArr[2];
+                    let to = strArr[4];
+
+                    submitForm(from, to);
+                }
+
+                recognizer.close();
+                recognizer = undefined;
+            },
+            function (err) {
+                startRecognizeOnceAsyncButton.disabled = false;
+                startRecognizeOnceAsyncButton.value = "Click me!";
+                phraseDiv.innerHTML += err;
+                window.console.log(err);
+
+                recognizer.close();
+                recognizer = undefined;
+            });
+    });
+</script>
+
+</html>
