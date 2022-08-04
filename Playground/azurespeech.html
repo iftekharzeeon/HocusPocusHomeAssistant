@@ -18,11 +18,11 @@
       </tr>
       <tr>
         <td align="right"><a href="https://docs.microsoft.com/azure/cognitive-services/speech-service/get-started" target="_blank">Subscription</a>:</td>
-        <td><input id="subscriptionKey" type="text" size="40" value="daf9781e4092446f823aad48269a90d0"></td>
+        <td><input id="subscriptionKey" type="text" size="40" value="subscription"></td>
       </tr>
       <tr>
         <td align="right">Region</td>
-        <td><input id="serviceRegion" type="text" size="40" value="eastus"></td>
+        <td><input id="serviceRegion" type="text" size="40" value="YourServiceRegion"></td>
       </tr>
       <tr>
         <td></td>
@@ -32,7 +32,6 @@
         <td align="right" valign="top">Results</td>
         <td><textarea id="phraseDiv" style="display: inline-block;width:500px;height:200px"></textarea></td>
       </tr>
-      <p id="demo"></p>
     </table>
   </div>
   <!-- </uidiv> -->
@@ -80,20 +79,6 @@
             phraseDiv.innerHTML += result.text;
             window.console.log(result);
 
-            const requestBody = {
-              "service_id" : document.getElementById("Service").value
-            }
-            const requestJSON = JSON.stringify(requestBody)
-            const response = await fetch('http://localhost:3000/api/getServiceDepartments',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: requestJSON
-        });
-        responseObj = await response.json();
-        console.log(responseObj);
-
             recognizer.close();
             recognizer = undefined;
           },
@@ -105,11 +90,7 @@
             recognizer.close();
             recognizer = undefined;
           });
-
-          console.log(phraseDiv.value);
       });
-
-      
 
       if (!!window.SpeechSDK) {
         SpeechSDK = window.SpeechSDK;
@@ -123,14 +104,14 @@
   <!-- </quickstartcode> -->
 
   <script language="JavaScript" src="http://geoplugin.net/javascript.gp" type="text/javascript"></script>
-  <script type="text/javascript">
-    console.log('h');
-    var x = document.getElementById("demo");
-    function getLocation() {
-      x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName() + "(" + geoplugin_countryCode() + ")";
-      console.log(geoplugin_city());
-    }
-    getLocation();
+<script type="text/javascript">
+  console.log('h');
+  var x = document.getElementById("demo");
+  function getLocation() {
+    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName() + "(" + geoplugin_countryCode() + ")";
+    console.log(geoplugin_city());
+  }
+  getLocation();
 </script>
 </body>
 </html>
