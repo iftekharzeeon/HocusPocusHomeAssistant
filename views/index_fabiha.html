@@ -1,0 +1,157 @@
+<style>
+  
+  body {
+    background-color: rgb(224, 243, 253);
+  }
+
+  text {
+    color: whitesmoke;
+  }
+
+  img {
+    margin-left: 620px;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    margin-top: 80px;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 56px;
+  }
+
+  .asst {
+    margin-left: 725px;
+    background-color: brown;
+    color: white;
+    height: 50px;
+    width: 80px;
+    border: none;
+    border-radius: 10px;
+  }
+
+  .asst:hover {
+    background-color: white;
+    color: brown;
+  }
+</style>
+
+<html lang="en">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+<body>
+
+  <div class="blogs content">
+    <h4 id="demo" style="text-align: right;"></h4>
+    <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
+    <img src="./icon.jpg" />
+    <div>
+      <button class="asst" onclick="findMusic()"> Click Me!</button>
+    </div>
+    <div>
+      <button class="asst" onclick="getRoutes()"> Get Routes!</button>
+    </div>
+    <div id='map' style='width: 400px; height: 300px;'></div>
+
+
+</body>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+<script language="JavaScript" src="http://geoplugin.net/javascript.gp" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+crossorigin=""></script>
+
+<script type="text/javascript">
+  console.log('h');
+  var x = document.getElementById("demo");
+  function getLocation() {
+    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName();
+    //geoplugin_countryCode();
+    console.log(geoplugin_city());
+  }
+  getLocation();
+
+  function findMusic() {
+    console.log('Here');
+    let q = 'heavy metal';
+    let type = 'track';
+    let limit = 50;
+    let accessToken = 'BQBXN7_e64fJrfke_ixbHnXaCfalcNj28k137PkOCqCtT9pxUF7dtkeQgBIzRw4erTEgC6flenvAaD9IH2oEUYfjkgbhF8M-IBgj4LGOKWAo-tjMtsYH4bx-quwiT1hSqRqqjnMjZW2RNsM8pw_MIp9gAMS5ak0pQWVQG5e7QAsSIStI2q-a0xQK9Ctd9rZFmI4';
+
+    $.ajax({
+      url: 'https://api.spotify.com/v1/search?q=' + q + '&type=' + type + '&limit=' + limit,
+      type: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      },
+      error: function (err) {
+        console.log(err);
+      },
+      success: function (result) {
+        console.log(result);
+      }
+    });
+  }
+  function getRoutes() {
+    let destination = 'Dhanmondi';
+    let limit = 1;
+    let search_text = 'restaurants';
+    let accessToken = 'pk.eyJ1IjoiZmFiaWhhdGFzbmVlbSIsImEiOiJjbDZmM3FiOGQwMGZzM2Nyd3BtNmh3eG51In0.CSh3iux7sXAsxVSg2vlojw';
+
+    $.ajax({
+      url: 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + destination + '.json?access_token=' + accessToken + '&search_text=' + search_text + '&limit=' + limit + '&routing=true&autocomplete=true',
+      type: 'GET',
+      error: function (err) {
+        console.log(err);
+      },
+      success: function (result) {
+        console.log(result);
+        // map.on('load', () => {
+        //   map.addSource('destinationMap', {
+        //     type: 'geojson',
+        //     // Use URL for the value for the `data` property!!!
+        //     data: result.features[0]
+        //   }
+        //   );
+        //   map.addLayer({
+        //     'source': 'destinationMap',
+        //     'type': 'circle',
+        //     'paint': {
+        //       'circle-radius': 4,
+        //       'circle-stroke-width': 2,
+        //       'circle-color': 'blue',
+        //       'circle-stroke-color': 'white'
+        //     }
+        //   });
+        // });
+        var dest = L.map('map').setView(result.features[0].center, 13);
+        L.marker(dest).addTo(map);
+        console.log('aaaaaaaaaaaaa');
+      }
+    });
+  }
+
+
+
+  // map = new OpenLayers.Map("demoMap");
+  // map.addLayer(new OpenLayers.Layer.OSM());
+  // map.zoomToMaxExtent();
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZmFiaWhhdGFzbmVlbSIsImEiOiJjbDZmM3FiOGQwMGZzM2Nyd3BtNmh3eG51In0.CSh3iux7sXAsxVSg2vlojw';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11'
+  });
+</script>
+
+</html>
