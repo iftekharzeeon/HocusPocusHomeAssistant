@@ -137,8 +137,21 @@
             });
 
           } else if (strArr[0] == 'Show' && strArr[1] == 'news') {
+            let countryName = '';
+            let geoName = '';
+            if (geoplugin_countryName == undefined) {
+              countryName = 'BD';
+            } else {
+              countryName = geoplugin_city();
+            }
 
-            $.post('http://localhost:3000/api/newsSearch', { lang: 'en', country: geoplugin_countryName(), geo: geoplugin_city() },
+            if (geoplugin_city == undefined) {
+              geoName = 'Dhaka';
+            } else {
+              geoName = geoplugin_city();
+            }
+
+            $.post('http://localhost:3000/api/newsSearch', { lang: 'en', country: countryName, geo: geoName },
               function (returnedData) {
                 console.log(returnedData);
                 sessionStorage.setItem("items", JSON.stringify(returnedData));
