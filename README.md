@@ -2,9 +2,10 @@
 This project is developed as a part of BUET CSE Fest Hackathon 2022 (API and Cloud Services Category).<br>
 The problem statement for this competiton is given in this link : <br>
 https://docs.google.com/document/d/e/2PACX-1vQ5IXrU0T6bpXo4rvcaAwDosNeNiZAY5HQWPKEVhl_fi4SpNZFGqbr3eCGPCqscnd4_ojGmZOgxMYCI/pub?
+Visit the project at: https://mighty-cliffs-92435.herokuapp.com/
 <br>
 <h1>Project Details</h1>
-This project is done using Nodejs and numerous APIs and cloud services. We have build a smart Home Assistant Software which can communicate with the user and execute tasks accordingly.
+This project is built using Nodejs and numerous APIs and cloud services. We have build a smart Home Assistant Software which can communicate with the user and execute tasks accordingly.
 <h3> 1. Speech-to-Text Recognition </h3>
 We have used Microsoft Azure's <a href="https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk">https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk</a> API to implement this feature.
 <h3> 2. Music Recommendation </h3>
@@ -16,7 +17,7 @@ This feature lets the user search anything using voice input with the keyword "S
 <h3> 5. Route Planning </h3>
 Given source and destination by voice command, this feature is implemented with the help of <a href="https://www.mapquestapi.com/directions/v2/route">https://www.mapquestapi.com/directions/v2/route</a> API
 <h3> 6. Note Taking </h3>
-After taking voice input: "Take Note" from the user, list of note items are being saved to database. Afterwards, we have implented a Note Fetching API with voice command to let any user retrieve already taken notes. The user can fetch any particular note from any date specified, or he can simply retrieve all of the notes. 
+After taking voice input: "Take Note" from the user, list of note items are being saved to our mySQL database. Afterwards, we have implented a Note Fetching API with voice command to let any user retrieve already taken notes. The user can fetch any particular note from any date specified, or he can simply retrieve all of the notes. 
 <h3> 7. Additional Features </h3>
 We have integrated some additional APIs in our Home Assistant Software: TV show recommendations using <a href="https://api.tvmaze.com/search/shows">https://api.tvmaze.com/search/shows</a> API and Current weather using <a href="http://api.weatherstack.com/current">http://api.weatherstack.com/current</a> API.
 <br>
