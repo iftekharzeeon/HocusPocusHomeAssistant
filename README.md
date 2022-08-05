@@ -19,9 +19,10 @@ This feature lets the user search anything using voice input with the keyword `S
 <h3> 5. Route Planning </h3>
 Given source and destination by voice command, this feature is implemented with the help of <a href="https://www.mapquestapi.com/directions/v2/route">https://www.mapquestapi.com/directions/v2/route</a> API
 <h3> 6. Note Taking </h3>
-After taking voice input: `Take Note` from the user, list of note items are being saved to our mySQL database. Afterwards, we have implented a Note Fetching API with voice command `Fetch ALl Notes` to let any user retrieve all notes. The user can fetch any particular note from any date specified using voice command `Fetch Note Dated ___`. 
+After taking voice input: `Take Note` from the user, list of note items are being saved to our mySQL database. Afterwards, we have implented a Note Fetching API with voice command `Fetch All Notes` to let any user retrieve all notes. The user can fetch any particular note from any date specified using voice command `Fetch Note Dated ___`. 
 <h3> 7. Additional Features </h3>
 - We have integrated TV show recommendations using <a href="https://api.tvmaze.com/search/shows">https://api.tvmaze.com/search/shows</a> API. The user can use voice command `Find` to get information of any TV Show or Actors.
+<br>
 - The user can also see the current weather using <a href="http://api.weatherstack.com/current">http://api.weatherstack.com/current</a> API.
 <br>
 <h1> The Team </h1>
