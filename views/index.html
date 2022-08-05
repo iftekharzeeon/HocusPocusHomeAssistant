@@ -148,6 +148,29 @@
           } else if (strArr[0] == 'Show' && strArr[1] == 'map.') {
             console.log('nnn');
             window.location.replace('/mapNew');
+          } else if (strArr[0] == 'Find' && strArr[1] == 'TV' && (strArr[2] == 'series' || strArr == 'series.') ) {
+            let searchStr = '';
+            for (let i = 3; i < strArr.length; i++) {
+              searchStr += strArr[i] + ' ';
+            }
+            console.log(searchStr);
+            $.get('https://api.tvmaze.com/search/shows?q='+searchStr, 
+            function (returnedData) {
+              console.log(returnedData);
+              sessionStorage.setItem("items", JSON.stringify(returnedData));
+              sessionStorage.setItem("keyword", searchStr);
+              window.location.replace("/tvSeries");
+            });
+          } else if (strArr[0] == 'Take' && (strArr[1] == 'note' || strArr[1] == 'note.')) {
+            let noteDetails = '';
+            for (let i = 2; i < strArr.length; i++) {
+              noteDetails += strArr[i] + ' ';
+            }
+            $.post('http://localhost:3000/api/uploadNote', { noteDetails: noteDetails},
+              function (returnedData) {
+                console.log(returnedData);
+              });
+
           }
 
           recognizer.close();

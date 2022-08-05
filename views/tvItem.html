@@ -89,13 +89,13 @@
 
         let design = '';
 
-        for (let i = 0; i < tvItem.tracks.items.length; i++) {
+        for (let i = 0; i < tvItem.length; i++) {
             design += `<div class="col-md-4">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">` + tvItem.tracks.items[i].name + `</h5>
-                    <p class="card-text">` + tvItem.tracks.items[i].artists[0].name + `</p>
-                    <h6 style="text-align: right; margin-right: 10px;"><a href="` + tvItem.tracks.items[i].external_urls.spotify + `">See more</a></h6>
+                    <h5 class="card-title">` + tvItem[0].show.name + `</h5>
+                    <p class="card-text">` + tvItem[0].show.genres + `</p>
+                    <h6 style="text-align: right; margin-right: 10px;"><a href="` + tvItem[0].show.officialSite + `">See more</a></h6>
                   </div>
                 </div>
                 </div>`;

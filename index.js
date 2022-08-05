@@ -7,7 +7,7 @@ const port = 3000;
 const app = express();
 
 const server = require('http').Server(app);
-server.listen(port);
+server.listen(process.env.PORT || port);
 app.use(express.urlencoded({
     extended: true
 }));
@@ -45,6 +45,6 @@ app.get('/mapNew', (req, res) => {
     res.sendFile('./views/mapNew.html', {root : __dirname});
 });
 
-app.get('/map', (req, res) => {
-    res.sendFile('./views/index_fabiha.html', {root : __dirname});
+app.get('/tvSeries', (req, res) => {
+    res.sendFile('./views/tvitem.html', {root : __dirname});
 });
