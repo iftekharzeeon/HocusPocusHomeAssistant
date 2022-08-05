@@ -13,7 +13,7 @@
   }
 
   .title {
-    margin-top: 80px;
+    margin-top: 40px;
     text-align: center;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 56px;
@@ -41,12 +41,16 @@
 
   <div class="blogs content">
     <h4 id="demo" style="text-align: right;"></h4>
+      <h4 id="weather" style="text-align: right;"></h4>
+    </div>
     <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
+  </div>
     <img src="./icon.jpg" />
+    <br>
     <div>
       <input class="asst" type="button" id="btn" value="Click Me!"></button>
     </div>
-    <div>
+    <div align="center">
       <textarea id="phraseDiv">
 
       </textarea>
@@ -61,7 +65,25 @@
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script language="JavaScript" src="http://geoplugin.net/javascript.gp" type="text/javascript"></script>
 
-<script>
+<script type="text/javascript">
+  
+  $(document).ready(function () {
+    let accessKey = '64a30b77662e9b0a811938930318ec55';
+
+    $.ajax({
+      url: 'http://api.weatherstack.com/current?access_key=' + accessKey + '&query=' + geoplugin_city() + '&units=m',
+      type: 'GET',
+      error: function (err) {
+        console.log(err);
+      },
+      success: function (result) {
+        console.log(result);
+        $("#demo").html("Your Current Location: " + result.request.query);
+        $("#weather").html("Weather Today: "+ result.current.temperature + "°C, " + result.current.weather_descriptions);
+      }
+    });
+  });
+
   // status fields and start button in UI
   var phraseDiv;
   var startRecognizeOnceAsyncButton;
@@ -72,6 +94,7 @@
   var recognizer;
 
   document.addEventListener("DOMContentLoaded", function () {
+
     startRecognizeOnceAsyncButton = document.getElementById("btn");
     subscriptionKey = "daf9781e4092446f823aad48269a90d0";
     serviceRegion = "eastus";
@@ -168,13 +191,5 @@
   });
 </script>
 
-<script type="text/javascript">
-  var x = document.getElementById("demo");
-  function getLocation() {
-    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName();
-  }
-  getLocation();
-
-</script>
 
 </html>
