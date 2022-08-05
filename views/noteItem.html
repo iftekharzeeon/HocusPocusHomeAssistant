@@ -85,17 +85,16 @@
     document.addEventListener("DOMContentLoaded", function () {
         console.log(JSON.parse(sessionStorage.getItem("items")));
 
-        let tvItem = JSON.parse(sessionStorage.getItem("items"));
+        let noteItem = JSON.parse(sessionStorage.getItem("items"));
 
         let design = '';
 
-        for (let i = 0; i < tvItem.length; i++) {
+        for (let i = 0; i < noteItem.length; i++) {
             design += `<div class="col-md-4">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">` + tvItem[0].show.name + `</h5>
-                    <p class="card-text">` + tvItem[0].show.genres + `</p>
-                    <h6 style="text-align: right; margin-right: 10px;"><a href="` + tvItem[0].show.officialSite + `">See more</a></h6>
+                    <h5 class="card-title">` + noteItem[i].note + `</h5>
+                    <p class="card-text">` + noteItem[i].create_date + `</p>
                   </div>
                 </div>
                 </div>`;
@@ -121,7 +120,7 @@
             recognizer.recognizeOnceAsync(
                 function (result) {
                     startRecognizeOnceAsyncButton.disabled = false;
-                    startRecognizeOnceAsyncButton.value = "Get TV Show Recommendations!";
+                    startRecognizeOnceAsyncButton.value = "Click Me!";
                     document.getElementById("items").innerHTML = '';
                     window.console.log(result);
 
@@ -139,15 +138,22 @@
                                 sessionStorage.setItem("keyword", searchStr);
                                 window.location.replace("/searchItem");
                             });
-                    } else if (strArr[0] == 'Find') {
+                    } else if (strArr[0] == 'Play') {
                         let searchStr = '';
                         for (let i = 1; i < strArr.length; i++) {
                             searchStr += strArr[i] + ' ';
                         }
                         let q = searchStr;
+                        let type = 'track';
+                        let limit = 50;
+                        let accessToken = 'BQAOnB6D9pXT-CASm_VqLDBjmq7_JAESEcQDanm_7MRFMN55JMAKKAvahJNuxz2_9_Y35_9bgSMhECk_r83UfZ1BgY0v4ZV8kCmBthHEwWARNQF6mwq8zxtvfNw5gB_mZV48q5QaGHU_lB8NeMJGNsCwHjcsgUnnYwzsHU1uxpKpyccZo1qiYahAoY8o9837lG8';
+
                         $.ajax({
-                            url: 'https://api.tvmaze.com/search/shows?q=' + q,
+                            url: 'https://api.spotify.com/v1/search?q=' + q + '&type=' + type + '&limit=' + limit,
                             type: 'GET',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken
+                            },
                             error: function (err) {
                                 console.log(err);
                             },
@@ -155,7 +161,7 @@
                                 console.log(result);
                                 sessionStorage.setItem("items", JSON.stringify(result));
                                 sessionStorage.setItem("keyword", searchStr);
-                                window.location.replace("/tvItem");
+                                window.location.replace("/musicItem");
                             }
                         });
 
@@ -165,8 +171,8 @@
                             function (returnedData) {
                                 console.log(returnedData);
                                 sessionStorage.setItem("items", JSON.stringify(returnedData));
-                                sessionStorage.setItem("keyword", "TV Shows");
-                                window.location.replace("/tvItem");
+                                sessionStorage.setItem("keyword", "Local News");
+                                window.location.replace("/newsItem");
                             });
                     } else if (strArr[0] == 'Show' && strArr[1] == 'map.') {
                         console.log('nnn');
@@ -262,7 +268,7 @@
                 },
                 function (err) {
                     startRecognizeOnceAsyncButton.disabled = false;
-                    startRecognizeOnceAsyncButton.value = "Get TV Show Recommendations!";
+                    startRecognizeOnceAsyncButton.value = "Click me!";
                     phraseDiv.innerHTML += err;
                     window.console.log(err);
 

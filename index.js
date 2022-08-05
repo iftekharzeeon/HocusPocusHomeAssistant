@@ -48,3 +48,7 @@ app.get('/mapNew', (req, res) => {
 app.get('/tvSeries', (req, res) => {
     res.sendFile('./views/tvitem.html', {root : __dirname});
 });
+
+app.get('/noteItem', (req, res) => {
+    res.sendFile('./views/noteItem.html', {root : __dirname});
+});

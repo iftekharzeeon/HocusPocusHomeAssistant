@@ -12,5 +12,9 @@ router.post('/api/newsSearch', bodyParser, searchController.newsSearch);
 
 router.post('/api/uploadNote', bodyParser, noteController.addNote);
 
+router.post('/api/getAllNotes', bodyParser, noteController.allNotes);
+
+router.post('/api/getNotesByDate', bodyParser, noteController.allNotes);
+
 
 module.exports = router;

@@ -41,15 +41,13 @@
 
   <div class="blogs content">
     <h4 id="demo" style="text-align: right;"></h4>
+    <h4 id="weather" style="text-align: right;"></h4>
     <h1 class="title" id="title">Hocus Pocus Home Assistant</h1>
     <img src="./icon.jpg" />
     <div>
       <input class="asst" type="button" id="btn" value="Click Me!"></button>
     </div>
     <div>
-      <textarea id="phraseDiv">
-
-      </textarea>
     </div>
   </div>
 
@@ -72,15 +70,29 @@
   var recognizer;
 
   document.addEventListener("DOMContentLoaded", function () {
+
+    let accessKey = '64a30b77662e9b0a811938930318ec55';
+
+    $.ajax({
+      url: 'http://api.weatherstack.com/current?access_key=' + accessKey + '&query=' + geoplugin_city() + '&units=m',
+      type: 'GET',
+      error: function (err) {
+        console.log(err);
+      },
+      success: function (result) {
+        console.log(result);
+        $("#demo").html("Your Current Location: " + result.request.query);
+        $("#weather").html("Weather Today: " + result.current.temperature + "°C, " + result.current.weather_descriptions);
+      }
+    });
+
     startRecognizeOnceAsyncButton = document.getElementById("btn");
     subscriptionKey = "daf9781e4092446f823aad48269a90d0";
     serviceRegion = "eastus";
-    phraseDiv = document.getElementById("phraseDiv");
 
     startRecognizeOnceAsyncButton.addEventListener("click", function () {
       startRecognizeOnceAsyncButton.disabled = true;
       startRecognizeOnceAsyncButton.value = "Speak!";
-      phraseDiv.innerHTML = "";
 
       var speechConfig = SpeechSDK.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
 
@@ -92,8 +104,8 @@
         function (result) {
           startRecognizeOnceAsyncButton.disabled = false;
           startRecognizeOnceAsyncButton.value = "Click Me!";
-          phraseDiv.innerHTML += result.text;
           window.console.log(result);
+          console.log(result.text);
 
           let strArr = result.text.split(" ");
 
@@ -139,17 +151,6 @@
           } else if (strArr[0] == 'Show' && strArr[1] == 'news') {
             let countryName = '';
             let geoName = '';
-            if (geoplugin_countryName == undefined) {
-              countryName = 'BD';
-            } else {
-              countryName = geoplugin_city();
-            }
-
-            if (geoplugin_city == undefined) {
-              geoName = 'Dhaka';
-            } else {
-              geoName = geoplugin_city();
-            }
 
             $.post('http://localhost:3000/api/newsSearch', { lang: 'en', country: countryName, geo: geoName },
               function (returnedData) {
@@ -161,29 +162,90 @@
           } else if (strArr[0] == 'Show' && strArr[1] == 'map.') {
             console.log('nnn');
             window.location.replace('/mapNew');
-          } else if (strArr[0] == 'Find' && strArr[1] == 'TV' && (strArr[2] == 'series' || strArr == 'series.') ) {
+          } else if (strArr[0] == 'Find' && strArr[1] == 'TV' && (strArr[2] == 'series' || strArr == 'series.')) {
             let searchStr = '';
             for (let i = 3; i < strArr.length; i++) {
               searchStr += strArr[i] + ' ';
             }
             console.log(searchStr);
-            $.get('https://api.tvmaze.com/search/shows?q='+searchStr, 
-            function (returnedData) {
-              console.log(returnedData);
-              sessionStorage.setItem("items", JSON.stringify(returnedData));
-              sessionStorage.setItem("keyword", searchStr);
-              window.location.replace("/tvSeries");
-            });
+            $.get('https://api.tvmaze.com/search/shows?q=' + searchStr,
+              function (returnedData) {
+                console.log(returnedData);
+                sessionStorage.setItem("items", JSON.stringify(returnedData));
+                sessionStorage.setItem("keyword", searchStr);
+                window.location.replace("/tvSeries");
+              });
           } else if (strArr[0] == 'Take' && (strArr[1] == 'note' || strArr[1] == 'note.')) {
             let noteDetails = '';
             for (let i = 2; i < strArr.length; i++) {
               noteDetails += strArr[i] + ' ';
             }
-            $.post('http://localhost:3000/api/uploadNote', { noteDetails: noteDetails},
+            $.post('http://localhost:3000/api/uploadNote', { noteDetails: noteDetails },
               function (returnedData) {
                 console.log(returnedData);
+                sessionStorage.setItem("items", JSON.stringify(returnedData));
+                sessionStorage.setItem("keyword", "Notes");
+                window.location.replace("/noteItem");
               });
 
+          } else if (strArr[0] == 'Fetch') {
+            if (strArr[1] == 'all') {
+              $.post('http://localhost:3000/api/getAllNotes', {},
+                function (returnedData) {
+                  console.log(returnedData);
+                  sessionStorage.setItem("items", JSON.stringify(returnedData));
+                  sessionStorage.setItem("keyword", "Notes");
+                  window.location.replace("/noteItem");
+                });
+            } else if (strArr[1] == 'note' && strArr[2] == 'dated') {
+              let month = '';
+              if (strArr[4] == 'January') {
+                month = '01';
+              } else if (strArr[4] == 'February') {
+                month = '02';
+              } else if (strArr[4] == 'March') {
+                month = '03';
+              }
+              else if (strArr[4] == 'April') {
+                month = '04';
+              }
+              else if (strArr[4] == 'May') {
+                month = '05';
+              }
+              else if (strArr[4] == 'June') {
+                month = '06';
+              }
+              else if (strArr[4] == 'July') {
+                month = '07';
+              }
+              else if (strArr[4] == 'August') {
+                month = '08';
+              }
+              else if (strArr[4] == 'September') {
+                month = '09';
+              }
+              else if (strArr[4] == 'October') {
+                month = '10';
+              }
+              else if (strArr[4] == 'November') {
+                month = '11';
+              }
+              else if (strArr[4] == 'December') {
+                month = '12';
+              }
+
+              let dateString = strArr[5] + '-' + month + '-' + strArr[3];
+
+              console.log(dateString);
+
+              $.post('http://localhost:3000/api/getNotesByDate', { date: dateString },
+                function (returnedData) {
+                  console.log(returnedData);
+                  sessionStorage.setItem("items", JSON.stringify(returnedData));
+                  sessionStorage.setItem("keyword", "Notes");
+                  window.location.replace("/noteItem");
+                });
+            }
           }
 
           recognizer.close();
@@ -192,7 +254,6 @@
         function (err) {
           startRecognizeOnceAsyncButton.disabled = false;
           startRecognizeOnceAsyncButton.value = "Click me!";
-          phraseDiv.innerHTML += err;
           window.console.log(err);
 
           recognizer.close();
@@ -202,15 +263,6 @@
 
 
   });
-</script>
-
-<script type="text/javascript">
-  var x = document.getElementById("demo");
-  function getLocation() {
-    x.innerHTML = geoplugin_city() + ", " + geoplugin_countryName();
-  }
-  getLocation();
-
 </script>
 
 </html>
